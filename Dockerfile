@@ -2,5 +2,5 @@ FROM ghcr.io/openinvento/openinvento:latest
 
 COPY run.py /run.py
 
-# Preserve the upstream image's CMD and run it with values from Supervisor options.
+# The wrapper exports Supervisor options, then execs the upstream entrypoint.
 ENTRYPOINT ["python3", "/run.py"]

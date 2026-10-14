@@ -16,4 +16,4 @@ The repository root is the app directory. The Dockerfile extends the upstream mu
 
 ## Publishing an app image
 
-The release workflow builds `amd64` and `aarch64` images and publishes a combined image to GitHub Container Registry. To publish the first installable release, create a GitHub release tagged exactly `1.0.0` (matching `version` in `config.yaml`) after pushing this repository and enabling Actions with package write access. Future releases must use a tag matching the version in `config.yaml`.
+The release workflow builds `amd64` and `aarch64` images and publishes a combined image to GitHub Container Registry. Create a GitHub release whose tag exactly matches `version` in `config.yaml` after pushing this repository and enabling Actions with package write access. Future releases must also use a tag matching the app version.

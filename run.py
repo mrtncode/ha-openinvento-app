@@ -3,13 +3,9 @@
 
 import json
 import os
-import sys
 
 
 def main() -> None:
-    if len(sys.argv) < 2:
-        raise SystemExit("The OpenInvento image did not define a startup command")
-
     with open("/data/options.json", encoding="utf-8") as options_file:
         options = json.load(options_file)
 
@@ -33,7 +29,10 @@ def main() -> None:
     if options.get("app_urls"):
         env["APP_URLS"] = options["app_urls"]
 
-    os.execvpe(sys.argv[1], sys.argv[1:], env)
+    # The upstream image defines /entrypoint.sh as ENTRYPOINT and no CMD.
+    # Run that script so it performs migrations, admin creation, and starts
+    # both Gunicorn and Nginx after the options have been exported.
+    os.execve("/entrypoint.sh", ["/entrypoint.sh"], env)
 
 
 if __name__ == "__main__":
