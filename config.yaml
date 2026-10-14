@@ -10,13 +10,13 @@ arch:
 startup: application
 boot: auto
 ports:
-  80/tcp: null
+  80/tcp: 8080
 ports_description:
   80/tcp: OpenInvento web interface
 webui: "http://[HOST]:[PORT:80]"
 watchdog: "tcp://[HOST]:[PORT:80]"
 options:
-  app_url: "http://homeassistant.local:8080"
+  app_url: "http://homeassistant.local"
   app_urls: ""
   init_admin_username: admin
   init_admin_password: ""
