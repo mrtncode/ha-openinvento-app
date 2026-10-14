@@ -13,10 +13,10 @@ ports:
   80/tcp: 8080
 ports_description:
   80/tcp: OpenInvento web interface
-webui: "http://[HOST]:[PORT:80]"
-watchdog: "tcp://[HOST]:[PORT:80]"
+webui: "http://[HOST]:[PORT:8080]"
+watchdog: "tcp://[HOST]:[PORT:8080]"
 options:
-  app_url: "http://homeassistant.local"
+  app_url: "http://homeassistant.local:8080"
   app_urls: ""
   init_admin_username: admin
   init_admin_password: ""
