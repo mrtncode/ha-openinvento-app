@@ -46,6 +46,7 @@ jobs:
           image-tags: |
             ${{ github.event.release.tag_name }}
             latest
+          cosign: "false"
           push: "true"
           version: ${{ github.event.release.tag_name }}
 
@@ -61,6 +62,7 @@ jobs:
         with:
           architectures: ${{ env.ARCHITECTURES }}
           container-registry-password: ${{ secrets.GITHUB_TOKEN }}
+          cosign: "false"
           image-name: ${{ env.IMAGE_NAME }}
           image-tags: |
             ${{ github.event.release.tag_name }}
