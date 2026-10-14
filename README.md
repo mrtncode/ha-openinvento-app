@@ -6,7 +6,7 @@ Home Assistant app for [OpenInvento](https://github.com/openinvento/openinvento)
 
 In Home Assistant, open **Settings → Apps → App store → ⋮ → Repositories** and add:
 
-`https://github.com/mrtncode/ha-openinvento-app`
+`https://github.com/openinvento/ha-openinvento-app`
 
 Then install **OpenInvento**, configure its URL, initial administrator credentials, and secret key, set an available host port for port 80, and start the app. See [DOCS.md](DOCS.md) for details.
 
