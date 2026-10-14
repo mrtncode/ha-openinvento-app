@@ -16,4 +16,4 @@ The repository root is the app directory. The Dockerfile extends the upstream mu
 
 ## Publishing an app image
 
-The release workflow builds `amd64` and `aarch64` images and publishes a combined image to GitHub Container Registry. Create a GitHub release whose tag exactly matches `version` in `config.yaml` after pushing this repository and enabling Actions with package write access. Future releases must also use a tag matching the app version.
+The release workflow builds `amd64` and `aarch64` images and publishes a combined image to GitHub Container Registry. A scheduled workflow checks the upstream OpenInvento releases daily. When it finds a newer stable release, it removes the leading `v` from the version, updates `config.yaml`, adds a linked entry to [CHANGELOG.md](CHANGELOG.md), builds and publishes the image, and creates a matching GitHub release here. You can also start the check from the Actions tab with **Sync OpenInvento release → Run workflow**.

@@ -1,0 +1,78 @@
+name: Sync OpenInvento release
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      changed: ${{ steps.release.outputs.changed }}
+      version: ${{ steps.release.outputs.version }}
+      upstream_tag: ${{ steps.release.outputs.upstream_tag }}
+      commit: ${{ steps.commit.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.repository.default_branch || github.ref_name }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+      - name: Update app version and changelog from upstream
+        id: release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python .github/scripts/sync_upstream_release.py
+      - name: Commit release metadata
+        id: commit
+        if: steps.release.outputs.changed == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config.yaml CHANGELOG.md
+          git commit -m "Release OpenInvento ${VERSION}"
+          git push
+          echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  build:
+    needs: sync
+    if: needs.sync.outputs.changed == 'true'
+    uses: ./.github/workflows/build.yaml
+    with:
+      version: ${{ needs.sync.outputs.version }}
+      source_ref: ${{ needs.sync.outputs.commit }}
+    permissions:
+      contents: read
+      id-token: write
+      packages: write
+
+  publish-release:
+    needs: [sync, build]
+    if: needs.sync.outputs.changed == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ needs.sync.outputs.commit }}
+      - name: Publish Home Assistant app release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ needs.sync.outputs.version }}
+          UPSTREAM_TAG: ${{ needs.sync.outputs.upstream_tag }}
+          SOURCE_REF: ${{ needs.sync.outputs.commit }}
+        run: |
+          gh release create "$VERSION" \
+            --target "$SOURCE_REF" \
+            --title "OpenInvento $VERSION" \
+            --notes "Home Assistant app release for [OpenInvento ${UPSTREAM_TAG}](https://github.com/openinvento/openinvento/releases/tag/${UPSTREAM_TAG}). See [CHANGELOG.md](https://github.com/${GITHUB_REPOSITORY}/blob/${SOURCE_REF}/CHANGELOG.md) for details."
