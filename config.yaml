@@ -1,0 +1,33 @@
+name: OpenInvento
+slug: openinvento
+version: "1.0.0"
+image: ghcr.io/mrtncode/ha-openinvento-app
+description: Self-hosted home inventory management
+url: https://github.com/openinvento/openinvento
+arch:
+  - amd64
+  - aarch64
+startup: application
+boot: auto
+ports:
+  80/tcp: null
+ports_description:
+  80/tcp: OpenInvento web interface
+webui: "http://[HOST]:[PORT:80]"
+watchdog: "tcp://[HOST]:[PORT:80]"
+options:
+  app_url: "http://homeassistant.local:8080"
+  app_urls: ""
+  init_admin_username: admin
+  init_admin_password: ""
+  create_init_admin: true
+  enable_signup: false
+  secret_key: ""
+schema:
+  app_url: url
+  app_urls: str
+  init_admin_username: str
+  init_admin_password: password
+  create_init_admin: bool
+  enable_signup: bool
+  secret_key: password
