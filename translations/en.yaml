@@ -1,0 +1,24 @@
+configuration:
+  app_url:
+    name: App URL
+    description: Public base URL used to open OpenInvento, including scheme and port.
+  app_urls:
+    name: Additional trusted URLs
+    description: Optional comma-separated list of additional trusted browser URLs.
+  init_admin_username:
+    name: Initial administrator username
+    description: Username for the administrator created on first startup.
+  init_admin_password:
+    name: Initial administrator password
+    description: Password for the initial administrator; change it at first login.
+  create_init_admin:
+    name: Create initial administrator
+    description: Create an administrator only when the database contains no users.
+  enable_signup:
+    name: Enable public signup
+    description: Allow users to register their own accounts.
+  secret_key:
+    name: Secret key
+    description: Long random secret used by OpenInvento for application security.
+network:
+  80/TCP: OpenInvento web interface
